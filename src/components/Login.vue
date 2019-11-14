@@ -48,7 +48,7 @@
 						}else if(result == -3){
 							alert("错误次数过多，请15分钟后再试!");						
 						}else{
-							this.$router.push('/nav/user'); 
+							this.$router.push('/nav/statics'); 
 						}
             }.bind(this)).catch(function (error) { 
                 console.log(error);
