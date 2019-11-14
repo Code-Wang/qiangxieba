@@ -36,7 +36,7 @@
         params.append("password",this.password); 
         this.$axios({
             method: 'post',
-            url: this.ServerAddress + 'login',
+            url: this.ServerAddress + 'managerlogin',
             contentType: 'application/x-www-form-urlencoded',
             data:params,  
         }).then(function(response) {

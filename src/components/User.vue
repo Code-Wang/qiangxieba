@@ -11,18 +11,13 @@
       width="55">
     </el-table-column>
     <el-table-column
-      label="日期"
-      width="120">
-      <template slot-scope="scope">{{ scope.row.date }}</template>
-    </el-table-column>
-    <el-table-column
-      prop="name"
+      prop="username"
       label="姓名"
       width="120">
     </el-table-column>
     <el-table-column
-      prop="address"
-      label="地址"
+      prop="password"
+      label="密码"
       show-overflow-tooltip>
     </el-table-column>
     <el-table-column
@@ -56,25 +51,28 @@
   export default {
     data() {
       return {
-        tableData: [{
-          date: '2016-05-03',
-          name: '王老大',
-          address: '昆明市盘龙区xxxxx----1号'
-        }, {
-          date: '2016-05-02',
-          name: '杨老二',
-          address: '昆明市盘龙区xxxxx----2号'
-        }, {
-          date: '2016-05-04',
-          name: '刘老三',
-          address: '昆明市盘龙区xxxxx----3号'
-        }, {
-          date: '2016-05-01',
-          name: '钱老四',
-          address: '昆明市盘龙区xxxxx----4号'
-        }],
-        multipleSelection: []
+        tableData: [],
+        multipleSelection: [],
+        pageIndex: 0,
+        pangeCount: 10
       }
+    },
+
+    mounted: function() {
+        var params = new URLSearchParams();
+        params.append("index",this.pageIndex); 
+        params.append("count",this.pangeCount);
+        this.$axios({
+            method: 'post',
+            url: this.ServerAddress + 'getuserinfo',
+            contentType: 'application/x-www-form-urlencoded',
+            data:params,  
+        }).then(function(response) {
+            var result = response.data;
+            this.tableData = result
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
     },
 
     methods: {
