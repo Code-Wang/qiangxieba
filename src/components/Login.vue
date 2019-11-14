@@ -3,9 +3,9 @@
         <div class="logo-img">
             <img src="@/assets/logo.jpg" height="150" width="150"/>
         </div>
-        <div class="logo-desc">
+        <!-- <div class="logo-desc">
             <div style="font-family:PingFang SC font-size:200">后台管理系统</div>
-        </div>
+        </div> -->
 
         <el-row :gutter="20">
             <el-col :span="4" :offset="10"><div class="grid-content bg-purple">
@@ -36,15 +36,23 @@
         params.append("password",this.password); 
         this.$axios({
             method: 'post',
-            url: 'http://39.100.226.199:5555/login',
+            url: this.ServerAddress + 'login',
             contentType: 'application/x-www-form-urlencoded',
             data:params,  
         }).then(function(response) {
-            console.log("code:"+response.code);
+            var result = response.data.code;
+						if(result == -1){
+							alert("用户不存在!");
+						}else if(result== -2){
+							alert("密码错误!");
+						}else if(result == -3){
+							alert("错误次数过多，请15分钟后再试!");						
+						}else{
+							this.$router.push('/nav/user'); 
+						}
             }.bind(this)).catch(function (error) { 
                 console.log(error);
             })
-        this.$router.push('/nav/user'); 
     }
   }
   }

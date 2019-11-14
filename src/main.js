@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import Axios from 'axios' 
 
 Vue.prototype.$axios = Axios
+Vue.prototype.ServerAddress = 'http://39.100.226.199:5555/'
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 
