@@ -8,6 +8,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import Axios from 'axios' 
 
 Vue.prototype.$axios = Axios
+Vue.prototype.HOST = "/"
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 

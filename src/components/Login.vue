@@ -32,11 +32,11 @@
     methods: {
       login: function () {
         var params = new URLSearchParams();
-        params.append("username",this.username); 
+        params.append("userName",this.username); 
         params.append("password",this.password); 
         this.$axios({
             method: 'post',
-            url: 'http://39.100.226.199:5555/login',
+            url: this.HOST + "/login",
             contentType: 'application/x-www-form-urlencoded',
             data:params,  
         }).then(function(response) {
