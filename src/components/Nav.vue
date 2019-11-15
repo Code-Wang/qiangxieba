@@ -1,6 +1,5 @@
 <template>
   <div id="nav">
-<div class="line"></div>
 <el-menu
   router :default-active="activeIndex"
   class="el-menu"
