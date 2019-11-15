@@ -12,9 +12,14 @@
     </el-table-column>
     <el-table-column
       prop="username"
-      label="姓名"
+      label="登录名"
       width="120">
     </el-table-column>
+     <el-table-column
+      prop="truename"
+      label="真实姓名"
+      width="120">
+    </el-table-column>   
     <el-table-column
       prop="password"
       label="密码"

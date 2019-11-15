@@ -79,19 +79,28 @@
   export default {
     data() {
       return {
-        tableData: [{
-          webset: 'Snkrs',
-          account: '13888123456',
-          password: 'password123',
-          accountname: '测试人员1',
-          telphone: '13888123456',
-          address: '昆明市盘龙区司家营龙江雅苑1-1-1',
-          paytype: 'alipay',
-          payaccount: 'Test1',
-          defaultsize: '42.5'
-        }],
-        multipleSelection: []
+        tableData: [],
+        multipleSelection: [],
+        pageIndex: 0,
+        pangeCount: 10
       }
+    },
+
+    mounted: function() {
+        var params = new URLSearchParams();
+        params.append("index",this.pageIndex); 
+        params.append("count",this.pangeCount);
+        this.$axios({
+            method: 'post',
+            url: this.ServerAddress + 'getaccountinfo',
+            contentType: 'application/x-www-form-urlencoded',
+            data:params,  
+        }).then(function(response) {
+            var result = response.data;
+            this.tableData = result
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
     },
 
     methods: {
