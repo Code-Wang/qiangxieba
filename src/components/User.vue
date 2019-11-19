@@ -39,7 +39,7 @@
     </el-table-column>
   </el-table>
   <div style="margin-top: 20px">
-    <el-button @click="dialogVisible = true">新增用户</el-button>
+    <el-button @click="AddNewUser">新增用户</el-button>
   </div>
 
   <el-dialog title="新增用户" 
@@ -74,6 +74,7 @@
         pangeCount: 10,
         dialogVisible: false,
         newUser:{
+          id:0,
           username:'',
           truename:'',
           password:'',
@@ -109,6 +110,7 @@
       }
 
       var params = new URLSearchParams();
+      params.append("id", this.newUser.id); 
       params.append("username", this.newUser.username); 
       params.append("truename", this.newUser.truename);
       params.append("password", this.newUser.password);
@@ -119,6 +121,7 @@
           contentType: 'application/x-www-form-urlencoded',
           data:params,  
       }).then(function(response) {
+          this.dialogVisible = false
           alert(response.data.desc)
           }.bind(this)).catch(function (error) { 
               console.log(error);
@@ -127,8 +130,8 @@
 
     sendAddUserMsgxxx: function() {
       var params = new URLSearchParams();
-      params.append("id",2); 
-      params.append("webset", "huawei");
+      params.append("id",0); 
+      params.append("webset", "adidas");
       params.append("account","123"); 
       params.append("password","testpassword");
       params.append("accountname","ceshi_account"); 
