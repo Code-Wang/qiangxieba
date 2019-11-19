@@ -79,7 +79,6 @@
           truename:'',
           password:'',
         },
-        xxx:"用户名"
       }
     },
 
