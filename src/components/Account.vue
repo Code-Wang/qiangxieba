@@ -260,9 +260,6 @@
       params.append("payaccount",this.form.payaccount); 
       params.append("defaultsize",this.form.defaultsize);
 
-      console.log(params)
-      console.log(params.getAll('id'))
-
       this.$axios({
           method: 'post',
           url: this.ServerAddress + 'updateaccount',

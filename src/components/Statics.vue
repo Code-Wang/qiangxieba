@@ -13,7 +13,9 @@ export default {
         this.initChart();
     },
     data() {
-        return {};
+        return {
+            accountdata:[]
+        };
     },
     mounted: function() {
         let myChart1 = this.$echarts.init(this.$refs.account);
@@ -26,23 +28,27 @@ export default {
     },
     methods: {
         drawCircleChart: function (chart, title) {
-            let optiondata = {
-                series : [
-                    {
-                        name: title,
-                        type: 'pie',
-                        radius: '65%',
-                        data:[
-                            {value:235, name:'视频广告'},
-                            {value:274, name:'联盟广告'},
-                            {value:310, name:'邮件营销'},
-                            {value:335, name:'直接访问'},
-                            {value:400, name:'搜索引擎'}
-                        ]
-                    }
-                ]
-            }
-            chart.setOption(optiondata)
+            this.$axios({
+                method: 'post',
+                url: this.ServerAddress + 'getstatics',
+                contentType: 'application/x-www-form-urlencoded',
+                data:'',  
+            }).then(function(response) {
+                this.accountdata = response.data
+                let optiondata = {
+                    series : [
+                        {
+                            name: title,
+                            type: 'pie',
+                            radius: '65%',
+                            data: this.accountdata
+                        }
+                    ]
+                }
+                chart.setOption(optiondata)
+                    }.bind(this)).catch(function (error) { 
+                        console.log(error);
+                    })  
         },
 
         drawColumnarChart: function (chart, title) {
