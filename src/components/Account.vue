@@ -105,6 +105,17 @@
       width="120">
       <template slot-scope="scope">
         <el-button type="text" @click='EditShow(scope.row)'>编辑</el-button>
+<el-popover
+  placement="top"
+  width="160"
+  visible.sync="DeleteVisible">
+  <p>确定删除吗？</p>
+  <div style="text-align: right; margin: 0">
+    <el-button size="mini" type="text" @click='closedeleteform()'>取消</el-button>
+    <el-button type="primary" size="mini" @click='AccountDelete(scope.row.id)'>确定</el-button>
+  </div>
+  <el-button slot="reference" type="text" @click='opendeleteform()'>删除</el-button>
+</el-popover>
       </template>
     </el-table-column>
   </el-table>
@@ -201,12 +212,12 @@
   export default {
     data() {
       return {
+        DeleteVisible: false,
         tableData: [],
         multipleSelection: [],
         pageIndex: 0,
         pangeCount: 10,
         CityList:['茨坝','山水润城','金安小区'],
-        dialogTableVisible: false,
         dialogFormVisible: false,
         form:{
           id: 0,
@@ -295,9 +306,10 @@
                 console.log(error);
             })      
       },
-      AccountDelete: function() {
+      AccountDelete: function(Id) {
+        this.DeleteVisible = false
         var params = new URLSearchParams();
-        params.append("id",this.form.id); 
+        params.append("id", Id);
 
         this.$axios({
             method: 'post',
@@ -309,6 +321,12 @@
             }.bind(this)).catch(function (error) { 
                 console.log(error);
             })      
+      },
+      opendeleteform: function() {
+        this.DeleteVisible = true
+      },
+      closedeleteform: function() {
+        this.DeleteVisible = false
       },
       add(){//添加函数
         this.tableData.map(item=>{
