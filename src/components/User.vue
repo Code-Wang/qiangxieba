@@ -39,7 +39,7 @@
     </el-table-column>
   </el-table>
   <div style="margin-top: 20px">
-    <el-button @click="AddNewUser">新增用户</el-button>
+    <el-button type='primary' @click="AddNewUser()">新增用户</el-button>
   </div>
 
   <el-dialog title="新增用户" 

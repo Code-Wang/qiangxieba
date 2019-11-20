@@ -1,6 +1,5 @@
 <template>
 <div >
-  <el-button @click='AddShow()'>添加一条</el-button>
   <el-table
     ref="multipleTable"
     :data="tableData"
@@ -119,9 +118,24 @@
       </template>
     </el-table-column>
   </el-table>
+  <div style="margin-top: 20px">
+    <el-row>
+      <el-col :offset="8"  :span="4">
+        <el-button type='primary' @click='AddShow()'>添加账号</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total=this.totalCount
+          :page-size=this.pageCount>
+        </el-pagination>
+      </el-col>
+    </el-row>
+  </div>
 <!--点击添加的弹框-->
   <el-dialog title="添加信息" :visible.sync="dialogFormVisible">
-    <el-form :model="form">
+    <el-form :model="form" label-width="80px">
     <el-form-item label="网站">
       <el-input v-model="form.webset" autocomplete="off"></el-input>
     </el-form-item>
@@ -215,8 +229,9 @@
         DeleteVisible: false,
         tableData: [],
         multipleSelection: [],
-        pageIndex: 0,
-        pangeCount: 10,
+        pageIndex: 1,
+        pageCount: 10,
+        totalCount: 0,
         CityList:['茨坝','山水润城','金安小区'],
         dialogFormVisible: false,
         form:{
@@ -234,21 +249,9 @@
       }
     },
 
-    mounted: function() {
-        var params = new URLSearchParams();
-        params.append("index",this.pageIndex); 
-        params.append("count",this.pangeCount);
-        this.$axios({
-            method: 'post',
-            url: this.ServerAddress + 'getaccountinfo',
-            contentType: 'application/x-www-form-urlencoded',
-            data:params,  
-        }).then(function(response) {
-            var result = response.data;
-            this.tableData = result
-            }.bind(this)).catch(function (error) { 
-                console.log(error);
-            })
+    mounted(){
+      this.GetAccountInfo();
+      this.GetAccountCounts();
     },
     methods: {
       AddShow: function(){
@@ -318,6 +321,33 @@
             data:params,  
         }).then(function(response) {
             alert(response.data.desc)
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })      
+      },
+      GetAccountInfo: function(){
+        var params = new URLSearchParams();
+        params.append("index",(this.pageIndex - 1)); 
+        params.append("count",this.pageCount);
+        this.$axios({
+            method: 'post',
+            url: this.ServerAddress + 'getaccountinfo',
+            contentType: 'application/x-www-form-urlencoded',
+            data:params,  
+        }).then(function(response) {
+            this.tableData = response.data;
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
+      },
+      GetAccountCounts: function() {
+        this.$axios({
+            method: 'get',
+            url: this.ServerAddress + 'getaccountinfo',
+            contentType: 'application/x-www-form-urlencoded',
+            data:'',  
+        }).then(function(response) {
+            this.totalCount = response.Count;
             }.bind(this)).catch(function (error) { 
                 console.log(error);
             })      
