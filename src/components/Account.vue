@@ -347,7 +347,7 @@
             contentType: 'application/x-www-form-urlencoded',
             data:'',  
         }).then(function(response) {
-            this.totalCount = response.Count;
+            this.totalCount = response.data.Count;
             }.bind(this)).catch(function (error) { 
                 console.log(error);
             })      
