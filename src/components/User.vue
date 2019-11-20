@@ -126,35 +126,22 @@
               console.log(error);
           })      
     },
-
-    sendAddUserMsgxxx: function() {
-      var params = new URLSearchParams();
-      params.append("id",0); 
-      params.append("webset", "adidas");
-      params.append("account","123"); 
-      params.append("password","testpassword");
-      params.append("accountname","ceshi_account"); 
-      params.append("telphone","17764987932");
-      params.append("address","拓东体育馆"); 
-      params.append("paytype","wechat");
-      params.append("payaccount","wechat_test"); 
-      params.append("defaultsize",42);
-
-      console.log(params)
-      console.log(params.getAll('id'))
-
+    
+    AccountDelete: function() {
+      var params = new URLSearchParams();
+      params.append("id",this.form.id); 
       this.$axios({
-          method: 'post',
-          url: this.ServerAddress + 'updateaccount',
-          contentType: 'application/x-www-form-urlencoded',
-          data:params,  
-      }).then(function(response) {
-          alert(response.data.desc)
-          }.bind(this)).catch(function (error) { 
-              console.log(error);
-          })      
-    },
-
+        method: 'post',
+        url: this.ServerAddress + 'deluser',
+        contentType: 'application/x-www-form-urlencoded',
+          data:params,  
+      }).then(function(response) {
+        alert(response.data.desc)
+        }.bind(this)).catch(function (error) { 
+        console.log(error);
+        })      
+      },
+    
     AddNewUser: function() {
       this.dialogVisible = true
     }    

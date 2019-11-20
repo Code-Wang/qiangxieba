@@ -240,25 +240,25 @@
             })
     },
     methods: {
-      AddShow(){
+      AddShow: function(){
         this.dialogFormVisible = true;
       },
-      EditShow(row){       
+      EditShow: function(row){       
         this.form=row;
         this.dialogFormVisible = true;
       },
       AccountAdd: function() {
-      var params = new URLSearchParams();
-      params.append("id", 0);
-      params.append("webset", this.form.webset);
-      params.append("account",this.form.account); 
-      params.append("password",this.form.password);
-      params.append("accountname",this.form.accountname); 
-      params.append("telphone",this.form.telphone);
-      params.append("address",this.form.address); 
-      params.append("paytype",this.form.paytype);
-      params.append("payaccount",this.form.payaccount); 
-      params.append("defaultsize",this.form.defaultsize);
+        var params = new URLSearchParams();
+        params.append("id", 0);
+        params.append("webset", this.form.webset);
+        params.append("account",this.form.account); 
+        params.append("password",this.form.password);
+        params.append("accountname",this.form.accountname); 
+        params.append("telphone",this.form.telphone);
+        params.append("address",this.form.address); 
+        params.append("paytype",this.form.paytype);
+        params.append("payaccount",this.form.payaccount); 
+        params.append("defaultsize",this.form.defaultsize);
 
       this.$axios({
           method: 'post',
@@ -270,8 +270,8 @@
           }.bind(this)).catch(function (error) { 
               console.log(error);
           })      
-    },
-      AccountEdit(rows) {
+      },
+      AccountEdit: function() {
         var params = new URLSearchParams();
         params.append("id",this.form.id); 
         params.append("webset", this.form.webset);
@@ -287,6 +287,21 @@
         this.$axios({
             method: 'post',
             url: this.ServerAddress + 'updateaccount',
+            contentType: 'application/x-www-form-urlencoded',
+            data:params,  
+        }).then(function(response) {
+            alert(response.data.desc)
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })      
+      },
+      AccountDelete: function() {
+        var params = new URLSearchParams();
+        params.append("id",this.form.id); 
+
+        this.$axios({
+            method: 'post',
+            url: this.ServerAddress + 'delaccount',
             contentType: 'application/x-www-form-urlencoded',
             data:params,  
         }).then(function(response) {
