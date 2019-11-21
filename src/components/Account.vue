@@ -214,15 +214,10 @@
                 <el-button type="primary" @click='AccountEdit()'>确 定</el-button>
           </div>
   </el-dialog>
- <!-- <div style="margin-top: 20px">
-    <el-button @click="toggleSelection()">取消选择</el-button>
-  </div>-->
 </div>
 </template>
 
 <script>
-//var AccountUpdate={webset:'',account:'',password:'',accountname:'',telphone:'',address:'',paytype:'',payaccount:'',defaultsize:''};
-
   export default {
     data() {
       return {
@@ -347,7 +342,7 @@
             contentType: 'application/x-www-form-urlencoded',
             data:'',  
         }).then(function(response) {
-            this.totalCount = response.data.Count;
+            this.totalCount = int(response.data.Count);
             }.bind(this)).catch(function (error) { 
                 console.log(error);
             })      

@@ -39,7 +39,19 @@
     </el-table-column>
   </el-table>
   <div style="margin-top: 20px">
-    <el-button type='primary' @click="AddNewUser()">新增用户</el-button>
+    <el-row>
+      <el-col :offset="8"  :span="4">
+        <el-button type='primary' @click='AddNewUser()'>新增用户</el-button>
+      </el-col>
+      <el-col :span="12">
+        <el-pagination
+          background
+          layout="prev, pager, next"
+          :total=this.totalCount
+          :page-size=this.pageCount>
+        </el-pagination>
+      </el-col>
+    </el-row>
   </div>
 
   <el-dialog title="新增用户" 
@@ -70,8 +82,9 @@
       return {
         tableData: [],
         multipleSelection: [],
-        pageIndex: 0,
-        pangeCount: 10,
+        pageIndex: 1,
+        pageCount: 10,
+        totalCount: 0,
         dialogVisible: false,
         newUser:{
           id:0,
@@ -82,21 +95,9 @@
       }
     },
 
-    mounted: function() {
-        var params = new URLSearchParams();
-        params.append("index",this.pageIndex); 
-        params.append("count",this.pangeCount);
-        this.$axios({
-            method: 'post',
-            url: this.ServerAddress + 'getuserinfo',
-            contentType: 'application/x-www-form-urlencoded',
-            data:params,  
-        }).then(function(response) {
-            var result = response.data;
-            this.tableData = result
-            }.bind(this)).catch(function (error) { 
-                console.log(error);
-            })
+    mounted() {
+      this.GetUserCounts();
+      this.GetUserInfo();
     },
 
     methods: {
@@ -127,7 +128,7 @@
           })      
     },
     
-    AccountDelete: function() {
+    UserDelete: function() {
       var params = new URLSearchParams();
       params.append("id",this.form.id); 
       this.$axios({
@@ -144,7 +145,37 @@
     
     AddNewUser: function() {
       this.dialogVisible = true
-    }    
+    },
+
+    GetUserCounts: function(){
+        this.$axios({
+            method: 'get',
+            url: this.ServerAddress + 'getuserinfo',
+            contentType: 'application/x-www-form-urlencoded',
+            data:'',  
+        }).then(function(response) {
+            this.totalCount = int(response.data.Count);
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
+    },
+
+    GetUserInfo: function(){
+        var params = new URLSearchParams();
+        params.append("index",(this.pageIndex - 1));
+        params.append("count",this.pageCount);
+        this.$axios({
+            method: 'post',
+            url: this.ServerAddress + 'getuserinfo',
+            contentType: 'application/x-www-form-urlencoded',
+            data:params,  
+        }).then(function(response) {
+            var result = response.data;
+            this.tableData = result
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
+    }
   }
 }
 </script>
