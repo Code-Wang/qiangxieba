@@ -127,8 +127,10 @@
         <el-pagination
           background
           layout="prev, pager, next"
-          :total=this.totalCount
-          :page-size=this.pageCount>
+          :total="totalCount"
+          :page-size="pageCount"
+          :current-page.sync="pageIndex"
+          @current-change="ChangePage">
         </el-pagination>
       </el-col>
     </el-row>
@@ -342,10 +344,14 @@
             contentType: 'application/x-www-form-urlencoded',
             data:'',  
         }).then(function(response) {
-            this.totalCount = int(response.data.Count);
+            this.totalCount = parseInt(response.data.Count);
             }.bind(this)).catch(function (error) { 
                 console.log(error);
             })      
+      },
+      ChangePage: function(pageIndex){
+        this.pageIndex = pageIndex
+        this.GetAccountInfo()
       },
       opendeleteform: function() {
         this.DeleteVisible = true
