@@ -30,9 +30,8 @@
       width="120">
       <template slot-scope="scope">
         <el-button
-          @click.native.prevent="editUser(scope.$index, tableData)"
-          type="text"
-          size="small">
+          @click="editUserForm(scope.row)"
+          type="text">
           	编辑
         </el-button>
       </template>
@@ -75,6 +74,24 @@
       <el-button type="primary" @click="sendAddUserMsg">确 定</el-button>
     </div>
   </el-dialog>
+  <el-dialog title="编辑用户" 
+    :visible.sync="editDialogVisible">
+    <el-form :model="editUser" class="add-user" label-width="80px">
+      <el-form-item label="用户名称*">
+        <el-input v-model="editUser.username" placeholder="用户名称"></el-input>
+      </el-form-item>
+      <el-form-item label="真实姓名*">
+        <el-input v-model="editUser.truename" placeholder="真实姓名"></el-input>
+      </el-form-item>
+      <el-form-item label="密码*">
+        <el-input v-model="editUser.password" placeholder="密码"></el-input>
+      </el-form-item>
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="editDialogVisible = false">取 消</el-button>
+      <el-button type="primary" @click="sendEditUserMsg">确 定</el-button>
+    </div>
+  </el-dialog>
 </div>
 </template>
 
@@ -88,7 +105,14 @@
         pageCount: 10,
         totalCount: 0,
         dialogVisible: false,
+        editDialogVisible: false,
         newUser:{
+          id:0,
+          username:'',
+          truename:'',
+          password:'',
+        },
+        editUser:{
           id:0,
           username:'',
           truename:'',
@@ -129,7 +153,32 @@
               console.log(error);
           })      
     },
-    
+    sendEditUserMsg: function(){
+      if (this.editUser.username == '' ||
+          this.editUser.truename == '' ||
+          this.editUser.password == '' ){
+        alert("请填写所有的必填项")
+        return
+      }
+
+      var params = new URLSearchParams();
+      params.append("id", this.editUser.id); 
+      params.append("username", this.editUser.username); 
+      params.append("truename", this.editUser.truename);
+      params.append("password", this.editUser.password);
+
+      this.$axios({
+          method: 'post',
+          url: this.ServerAddress + 'updateuser',
+          contentType: 'application/x-www-form-urlencoded',
+          data:params,  
+      }).then(function(response) {
+          this.editDialogVisible = false
+          alert(response.data.desc)
+          }.bind(this)).catch(function (error) { 
+              console.log(error);
+          })           
+    },
     UserDelete: function() {
       var params = new URLSearchParams();
       params.append("id",this.form.id); 
@@ -144,11 +193,21 @@
         console.log(error);
         })      
       },
-    
-    AddNewUser: function() {
-      this.dialogVisible = true
+    editUserForm: function(row){
+      this.editUser=row;
+      this.editDialogVisible = true;      
     },
 
+    AddNewUser: function() {
+      this.resetdata()
+      this.dialogVisible = true
+    },
+    resetdata: function() {
+        this.newUser.id = 0
+        this.newUser.username = ''
+        this.newUser.truename = ''
+        this.newUser.password = ''
+    },
     GetUserCounts: function(){
         this.$axios({
             method: 'get',

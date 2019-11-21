@@ -136,49 +136,47 @@
     </el-row>
   </div>
 <!--点击添加的弹框-->
-  <el-dialog title="添加信息" :visible.sync="dialogFormVisible">
-    <el-form :model="form" label-width="80px">
+  <el-dialog title="添加信息" :visible.sync="dialogAddAcountVisible">
+    <el-form :model="newaccount" label-width="80px">
     <el-form-item label="网站">
-      <el-input v-model="form.webset" autocomplete="off"></el-input>
+      <el-input v-model="newaccount.webset" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="账号">
-      <el-input v-model="form.account" autocomplete="off"></el-input>
+      <el-input v-model="newaccount.account" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="密码">
-      <el-input v-model="form.password" autocomplete="off"></el-input>
+      <el-input v-model="newaccount.password" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="收货人">
-      <el-input v-model="form.accountname" autocomplete="off"></el-input>
+      <el-input v-model="newaccount.accountname" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="电话">
-      <el-input v-model="form.telphone" autocomplete="off"></el-input>
+      <el-input v-model="newaccount.telphone" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="地址">
-      <el-select v-model="form.address" placeholder="请选择收货地址">
+      <el-select v-model="newaccount.address" placeholder="请选择收货地址">
         <el-option label="茨坝" value="茨坝"></el-option>
         <el-option label="山水润城" value="山水润城"></el-option>
         <el-option label="金安小区" value="金安小区"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item label="付款方式">
-      <el-input v-model="form.paytype" autocomplete="off"></el-input>
+      <el-input v-model="newaccount.paytype" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="付款账号">
-      <el-input v-model="form.payaccount" autocomplete="off"></el-input>
+      <el-input v-model="newaccount.payaccount" autocomplete="off"></el-input>
     </el-form-item>
     <el-form-item label="购买尺码">
-      <el-input v-model="form.defaultsize" autocomplete="off"></el-input>
+      <el-input v-model="newaccount.defaultsize" autocomplete="off"></el-input>
     </el-form-item>
   </el-form>
           <div slot="footer" class="dialog-footer">
-                <el-button @click="dialogFormVisible = false">取 消</el-button>
+                <el-button @click="dialogAddAcountVisible = false">取 消</el-button>
                 <el-button type="primary" @click='AccountAdd()'>确 定</el-button>
           </div>
   </el-dialog>
-  <!--点击编辑的弹框：https://blog.csdn.net/HH18700418030/article/details/98969370
-  https://segmentfault.com/q/1010000010176928-->
   <el-dialog title="编辑信息" :visible.sync="dialogFormVisible">
-    <el-form :model="form">
+    <el-form :model="form" label-width="80px">
     <el-form-item label="网站">
       <el-input v-model="form.webset" autocomplete="off"></el-input>
     </el-form-item>
@@ -231,7 +229,20 @@
         totalCount: 0,
         CityList:['茨坝','山水润城','金安小区'],
         dialogFormVisible: false,
+        dialogAddAcountVisible: false,
         form:{
+          id: 0,
+          webset:'',
+          account:'',
+          password:'',
+          accountname:'',
+          telphone:'',
+          address:'',
+          paytype:'',
+          payaccount:'',
+          defaultsize:''          
+        },
+        newaccount:{
           id: 0,
           webset:'',
           account:'',
@@ -252,7 +263,8 @@
     },
     methods: {
       AddShow: function(){
-        this.dialogFormVisible = true;
+        this.resetData()
+        this.dialogAddAcountVisible = true;
       },
       EditShow: function(row){       
         this.form=row;
@@ -260,16 +272,16 @@
       },
       AccountAdd: function() {
         var params = new URLSearchParams();
-        params.append("id", 0);
-        params.append("webset", this.form.webset);
-        params.append("account",this.form.account); 
-        params.append("password",this.form.password);
-        params.append("accountname",this.form.accountname); 
-        params.append("telphone",this.form.telphone);
-        params.append("address",this.form.address); 
-        params.append("paytype",this.form.paytype);
-        params.append("payaccount",this.form.payaccount); 
-        params.append("defaultsize",this.form.defaultsize);
+        params.append("id", this.newaccount.id);
+        params.append("webset", this.newaccount.webset);
+        params.append("account",this.newaccount.account); 
+        params.append("password",this.newaccount.password);
+        params.append("accountname",this.newaccount.accountname); 
+        params.append("telphone",this.newaccount.telphone);
+        params.append("address",this.newaccount.address); 
+        params.append("paytype",this.newaccount.paytype);
+        params.append("payaccount",this.newaccount.payaccount); 
+        params.append("defaultsize",this.newaccount.defaultsize);
 
       this.$axios({
           method: 'post',
@@ -277,6 +289,7 @@
           contentType: 'application/x-www-form-urlencoded',
           data:params,  
       }).then(function(response) {
+          this.dialogAddAcountVisible = false
           alert(response.data.desc)
           }.bind(this)).catch(function (error) { 
               console.log(error);
@@ -301,6 +314,7 @@
             contentType: 'application/x-www-form-urlencoded',
             data:params,  
         }).then(function(response) {
+            this.dialogFormVisible = false
             alert(response.data.desc)
             }.bind(this)).catch(function (error) { 
                 console.log(error);
@@ -358,6 +372,18 @@
       },
       closedeleteform: function() {
         this.DeleteVisible = false
+      },
+      resetData: function() {
+        this.newaccount.id = 0
+        this.newaccount.webset = ''
+        this.newaccount.account = ''
+        this.newaccount.password = ''
+        this.newaccount.accountname = ''
+        this.newaccount.telphone = ''
+        this.newaccount.address = ''
+        this.newaccount.paytype = ''
+        this.newaccount.payaccount = ''
+        this.newaccount.defaultsize = ''
       },
       add(){//添加函数
         this.tableData.map(item=>{
