@@ -1,15 +1,93 @@
 <template>
 <div >
+  <!--搜索栏-->
+<el-collapse>
+  <el-collapse-item >
+        <template slot="title" >
+            <font color="#409EFFj " align="center" size="+2">查询</font>
+        </template>
+<el-col :span="24" class="toolbar">
+          <el-form :inline="true" :model="filters" :label-position="left">
+            <el-form-item>
+              <el-input v-model="form.webset" placeholder="网站" size="small"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="form.account" placeholder="账号" size="small"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="form.accountname" placeholder="收货人" size="small"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="form.telphone" placeholder="联系电话" size="small" ></el-input>
+            </el-form-item><br>
+            <el-form-item>
+              <template>
+              <el-select v-model="form.address" placeholder="收货地址" size="small">
+                  <el-option label="茨坝" value="茨坝"></el-option>
+                  <el-option label="山水润城" value="山水润城"></el-option>
+                  <el-option label="金安小区" value="金安小区"></el-option>
+              </el-select>
+              </template>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="form.paytype" placeholder="付款方式" size="small" ></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-input v-model="form.payaccount" placeholder="付款账号" size="small" ></el-input>
+            </el-form-item>
+            <el-form-item :label-position="left">
+              <el-input v-model="form.defaultsize" placeholder="购买尺码" size="small" ></el-input>
+            </el-form-item><br>
+            <el-form-item>
+              <el-button type="primary" @click="getUser">搜索</el-button>
+            </el-form-item>
+          </el-form>
+</el-col>
+  </el-collapse-item>
+</el-collapse>
+
+    <!--<el-col :span="2" >
+      <el-input v-model="form.webset" placeholder="网站" size="small"></el-input>
+    </el-col>
+    <el-col :span="2" >
+      <el-input v-model="form.account" placeholder="账号" size="small"></el-input>
+    </el-col>
+    <el-col :span="2" >
+      <el-input v-model="form.accountname" placeholder="收货人" size="small"></el-input>
+    </el-col>
+    <el-col :span="2" >
+      <el-input v-model="form.telphone" placeholder="联系电话" size="small" ></el-input>
+    </el-col>
+    <el-col :span="2" >
+      <el-select v-model="form.address" placeholder="收货地址" size="small">
+        <el-option label="茨坝" value="茨坝"></el-option>
+        <el-option label="山水润城" value="山水润城"></el-option>
+        <el-option label="金安小区" value="金安小区"></el-option>
+      </el-select>
+    </el-col>
+    <el-col :span="2" >
+      <el-input v-model="form.paytype" placeholder="付款方式" size="small" ></el-input>
+    </el-col>
+    <el-col :span="2" >
+      <el-input v-model="form.payaccount" placeholder="付款账号" size="small" ></el-input>
+    </el-col>  
+    <el-col :span="2" >
+      <el-input v-model="form.defaultsize" placeholder="购买尺码" size="small" ></el-input>
+    </el-col>  
+    <el-col :span="2" >
+      <el-button type="primary" icon="el-icon-search" @click=''>搜索</el-button>
+    </el-col>   -->  
+
   <el-table
     ref="multipleTable"
     :data="tableData"
     tooltip-effect="dark"
     style="width: 100%"
     @selection-change="handleSelectionChange">
-    <el-table-column
+ <!--  <el-table-column
       type="selection"
       width="55">
-    </el-table-column>
+    </el-table-column>-->
     <el-table-column
       prop="webset"
       label="网站"
