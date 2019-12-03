@@ -11,6 +11,7 @@
   <el-menu-item index="/nav/statics">数据统计</el-menu-item>
   <el-menu-item index="/nav/user">用户管理</el-menu-item>
   <el-menu-item index="/nav/account">账号管理</el-menu-item>
+  <el-menu-item index="/nav/stocks">库存</el-menu-item>
   <el-menu-item index="/nav/orders">订单管理</el-menu-item>
 </el-menu>
     <router-view/>

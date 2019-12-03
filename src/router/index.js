@@ -5,6 +5,7 @@ import Nav from '@/components/Nav'
 import Statics from '@/components/Statics'
 import User from '@/components/User'
 import Account from '@/components/Account'
+import Stocks from '@/components/Stocks'
 import Orders from '@/components/Orders'
 
 Vue.use(Router)
@@ -36,6 +37,11 @@ export default new Router({
           name: 'Account',
           component: Account
         },
+        {
+          path: 'stocks',
+          name: 'Stocks',
+          component: Stocks
+        },           
         {
           path: 'orders',
           name: 'Orders',
