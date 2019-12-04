@@ -72,7 +72,7 @@ export default {
             contentType: 'application/x-www-form-urlencoded',
             data:params,  
         }).then(function(response) {
-            var result = response.data;
+            var result= response.data;
             this.stocksdata = result
             }.bind(this)).catch(function (error) { 
                 console.log(error);
