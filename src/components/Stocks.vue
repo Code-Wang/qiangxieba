@@ -54,28 +54,31 @@ export default {
   data() {
     return {
       currentDate: new Date(),
-      stocksdata :[{
-        itemid:0,
-        itemindex:0,
-        itemname:"蒸汽眼罩(30片装)",
-        itemimage:require("@/assets/zhengqiyanzhao.jpg"),
-        itemcount:0,
-      },
-      {
-        itemid:1,
-        itemindex:1,
-        itemname:"蒸汽眼罩(12片装)",
-        itemimage:require("@/assets/zhengqiyanzhao12.jpg"),
-        itemcount:0,
-      }],
-      stock:{
-        itemid:0,
-        itemindex:0,
-        itemname:"",
-        itemimage:"@/assets/zhengqiyanzhao.jpg",
-        itemcount:0,
-      }
+      stocksdata :[],
     };
-  }
+  },
+
+  mounted() {
+    this.GetStocksInfo();
+  },
+
+
+  methods: {
+    GetStocksInfo: function(){
+        var params = new URLSearchParams();
+        this.$axios({
+            method: 'post',
+            url: this.ServerAddress + 'getstocksinfo',
+            contentType: 'application/x-www-form-urlencoded',
+            data:params,  
+        }).then(function(response) {
+            var result = response.data;
+            this.stocksdata = result
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
+    },
+
+  },
 }
 </script>
