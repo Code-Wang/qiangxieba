@@ -224,6 +224,7 @@
         }).then(function(response) {
             var result = response.data;
             this.tableData = result
+            this.dialogVisible = false
             }.bind(this)).catch(function (error) { 
                 console.log(error);
             })
