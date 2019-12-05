@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row>
-        <el-col :span="8" v-for="(item, index) in stocksdata" :key="item" :offset="index > 0 ? 1 : 0">
+        <el-col :span="8" v-for="(item, index) in stocksdata" :key="index" :offset="index > 0 ? 1 : 0">
             <el-card :body-style="{ padding: '0px' }">
             <img :src="item.itemimage" class="image" style="height: 300px">
             <div style="padding: 14px;">
@@ -55,6 +55,7 @@ export default {
     return {
       currentDate: new Date(),
       stocksdata :[],
+      salersmanlist :[],
     };
   },
 
@@ -65,12 +66,11 @@ export default {
 
   methods: {
     GetStocksInfo: function(){
-      var params = new URLSearchParams();
       this.$axios({
           method: 'post',
           url: this.ServerAddress + 'getstocksinfo',
           contentType: 'application/x-www-form-urlencoded',
-          data:params,  
+          data:'',  
       }).then(function(response) {
           var result= response.data;
           this.stocksdata = result
@@ -79,6 +79,20 @@ export default {
           })
     },
 
+    GetUserList: function(){
+        var params = new URLSearchParams();
+        params.append("index", 'userlist');
+        this.$axios({
+            method: 'get',
+            url: this.ServerAddress + 'getuserinfo',
+            contentType: 'application/x-www-form-urlencoded',
+            data:params,  
+        }).then(function(response) {
+            this.salersmanlist = parseInt(response.data);
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
+    },
   },
 }
 </script>

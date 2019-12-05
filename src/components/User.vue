@@ -186,7 +186,7 @@
         method: 'post',
         url: this.ServerAddress + 'deluser',
         contentType: 'application/x-www-form-urlencoded',
-          data:params,  
+        data:params,  
       }).then(function(response) {
         alert(response.data.desc)
         }.bind(this)).catch(function (error) { 
@@ -211,9 +211,9 @@
     GetUserCounts: function(){
         this.$axios({
             method: 'get',
-            url: this.ServerAddress + 'getuserinfo',
+            url: this.ServerAddress + 'getuserinfo?index=usercounts',
             contentType: 'application/x-www-form-urlencoded',
-            data:'',  
+            data:'',
         }).then(function(response) {
             this.totalCount = parseInt(response.data.Count);
             }.bind(this)).catch(function (error) { 

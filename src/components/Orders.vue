@@ -77,7 +77,14 @@
     :visible.sync="dialogVisible">
     <el-form :model="newOrders" class="add-orders" label-width="80px">
       <el-form-item label="销售人员*">
-        <el-input v-model="newOrders.salersmanname" placeholder="销售人员"></el-input>
+        <el-select v-model="newOrders.salersmanname" placeholder="销售人员">
+          <el-option
+            v-for="user in userlist"
+            :key="user.username"
+            :label="user.username"
+            :value="user.username">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="销售物品*">
         <el-select v-model="newOrders.itemid" placeholder="销售物品" @change="currentSel">
@@ -93,10 +100,10 @@
         <el-input v-model="newOrders.counts" placeholder="销售数量" @change="changeSaleCounts"></el-input>
       </el-form-item>
       <el-form-item label="销售单价*">
-        <el-input v-model="newOrders.price" placeholder="销售单价"></el-input>
+        <el-input v-model="newOrders.price" placeholder="销售单价 " @change="calcTotalPrice"></el-input>
       </el-form-item>
        <el-form-item label="销售总价*">
-        <el-input v-model="newOrders.totalprice" placeholder="销售总价"></el-input>
+        <el-input v-model="newOrders.totalprice" placeholder="销售总价" disabled></el-input>
       </el-form-item>
       <el-form-item label="顾客姓名*">
         <el-input v-model="newOrders.customername" placeholder="顾客姓名"></el-input>
@@ -145,6 +152,7 @@
           customeraddress:'',
           date:'',
         },
+        userlist: [],
         itemlist: [],
         maxsalecount:0,
       }
@@ -152,6 +160,7 @@
 
     mounted (){
       this.getItemList()
+      this.GetUserList()
     },
 
     methods:{
@@ -194,19 +203,28 @@
       },
 
       changeSaleCounts: function(){
+        if(this.newOrders.itemid == '') {
+          alert("先选择销售的商品")
+          return
+        }
+
         if(this.newOrders.counts > this.maxsalecount){
           this.newOrders.counts = this.maxsalecount 
           alert("超过最大库存，库存只有" + this.maxsalecount)
         }
+        this.calcTotalPrice()
+      },
+
+      calcTotalPrice: function(){
+        this.newOrders.totalprice = parseFloat(parseInt(this.newOrders.counts) * this.newOrders.price).toFixed(4)
       },
 
       getItemList: function (){
-        var params = new URLSearchParams(); 
         this.$axios({
             method: 'get',
             url: this.ServerAddress + 'getitemlist',
             contentType: 'application/x-www-form-urlencoded',
-            data:params,  
+            data:'',  
         }).then(function(response) {
             var result= response.data;
             this.itemlist = result
@@ -214,6 +232,19 @@
                 console.log(error);
             })
       },
+
+      GetUserList: function(){
+        this.$axios({
+            method: 'get',
+            url: this.ServerAddress + 'getuserinfo?index=userlist',
+            contentType: 'application/x-www-form-urlencoded',
+            data:'',
+        }).then(function(response) {
+            this.userlist = response.data;
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
+    },
     }
   }
 
