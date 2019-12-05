@@ -65,18 +65,18 @@ export default {
 
   methods: {
     GetStocksInfo: function(){
-        var params = new URLSearchParams();
-        this.$axios({
-            method: 'post',
-            url: this.ServerAddress + 'getstocksinfo',
-            contentType: 'application/x-www-form-urlencoded',
-            data:params,  
-        }).then(function(response) {
-            var result= response.data;
-            this.stocksdata = result
-            }.bind(this)).catch(function (error) { 
-                console.log(error);
-            })
+      var params = new URLSearchParams();
+      this.$axios({
+          method: 'post',
+          url: this.ServerAddress + 'getstocksinfo',
+          contentType: 'application/x-www-form-urlencoded',
+          data:params,  
+      }).then(function(response) {
+          var result= response.data;
+          this.stocksdata = result
+          }.bind(this)).catch(function (error) { 
+              console.log(error);
+          })
     },
 
   },

@@ -15,6 +15,11 @@
       width="120">
     </el-table-column>
     <el-table-column
+      prop="saleitemname"
+      label="销售物品"
+      width="120">
+    </el-table-column>    
+    <el-table-column
       prop="salesprice"
       label="销售单价"
       width="120">
@@ -74,8 +79,18 @@
       <el-form-item label="销售人员*">
         <el-input v-model="newOrders.salersmanname" placeholder="销售人员"></el-input>
       </el-form-item>
+      <el-form-item label="销售物品*">
+        <el-select v-model="newOrders.itemid" placeholder="销售物品" @change="currentSel">
+          <el-option
+            v-for="item in itemlist"
+            :key="item.itemid"
+            :label="item.itemname"
+            :value="item.itemid">
+          </el-option>
+        </el-select>
+      </el-form-item>      
       <el-form-item label="销售数量*">
-        <el-input v-model="newOrders.counts" placeholder="销售数量"></el-input>
+        <el-input v-model="newOrders.counts" placeholder="销售数量" @change="changeSaleCounts"></el-input>
       </el-form-item>
       <el-form-item label="销售单价*">
         <el-input v-model="newOrders.price" placeholder="销售单价"></el-input>
@@ -120,6 +135,8 @@
         newOrders:{
           id:0,
           salersmanname:'',
+          itemid:'',
+          itemname:'',
           counts:'',
           price:0,
           totalprice:0,
@@ -128,7 +145,13 @@
           customeraddress:'',
           date:'',
         },
+        itemlist: [],
+        maxsalecount:0,
       }
+    },
+
+    mounted (){
+      this.getItemList()
     },
 
     methods:{
@@ -136,17 +159,61 @@
       this.resetdata()
       this.dialogVisible = true
     },
-    resetdata: function() {
-        this.newOrders.id = 0
-        this.newOrders.salersmanname = ''
-        this.newOrders.counts = ''
-        this.newOrders.price = 0
-        this.newOrders.totalprice = 0
-        this.newOrders.customername = ''
-        this.newOrders.customertelphone = ''
-        this.newOrders.customeraddress = ''
-        this.newOrders.date = ''
-    },
+      resetdata: function() {
+          this.newOrders.id = 0
+          this.newOrders.salersmanname = ''
+          this.newOrders.itemid = ''
+          this.newOrders.itemname = ''
+          this.newOrders.counts = ''
+          this.newOrders.price = 0
+          this.newOrders.totalprice = 0
+          this.newOrders.customername = ''
+          this.newOrders.customertelphone = ''
+          this.newOrders.customeraddress = ''
+          this.newOrders.date = ''
+      },
+
+      ChangePage: function(pageIndex){
+        this.pageIndex = pageIndex
+        //this.GetAccountInfo()
+      },
+
+      sendAddOrdersMsg: function(){
+
+      },
+
+      currentSel: function(selVal){
+        for(let j = 0,len=this.itemlist.length; j < len; j++) {
+          if(this.itemlist[j] != null && this.itemlist[j].itemid == selVal){
+            this.newOrders.itemid = selVal
+            this.newOrders.itemname = this.itemlist[j].itemname
+            this.maxsalecount = this.itemlist[j].itemcount
+            break
+          }
+        }
+      },
+
+      changeSaleCounts: function(){
+        if(this.newOrders.counts > this.maxsalecount){
+          this.newOrders.counts = this.maxsalecount 
+          alert("超过最大库存，库存只有" + this.maxsalecount)
+        }
+      },
+
+      getItemList: function (){
+        var params = new URLSearchParams(); 
+        this.$axios({
+            method: 'get',
+            url: this.ServerAddress + 'getitemlist',
+            contentType: 'application/x-www-form-urlencoded',
+            data:params,  
+        }).then(function(response) {
+            var result= response.data;
+            this.itemlist = result
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
+      },
     }
   }
 
