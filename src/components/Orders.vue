@@ -140,7 +140,6 @@
         dialogVisible: false,
         editDialogVisible: false,
         newOrders:{
-          id:0,
           salersmanname:'',
           itemid:'',
           itemname:'',
@@ -169,7 +168,6 @@
       this.dialogVisible = true
     },
       resetdata: function() {
-          this.newOrders.id = 0
           this.newOrders.salersmanname = ''
           this.newOrders.itemid = ''
           this.newOrders.itemname = ''
@@ -184,10 +182,54 @@
 
       ChangePage: function(pageIndex){
         this.pageIndex = pageIndex
-        //this.GetAccountInfo()
+        this.GetOrdersInfo()
+      },
+
+      checkparams: function(){
+          if(this.newOrders.salersmanname == '' ||
+             this.newOrders.itemid == '' ||
+             this.newOrders.itemname == ''  ||
+             this.newOrders.counts == '' ||
+             this.newOrders.price == 0 ||
+             this.newOrders.totalprice == 0 ||
+             this.newOrders.customername == ''){
+               return false
+             }
+             return true
       },
 
       sendAddOrdersMsg: function(){
+        if(!this.checkparams()){
+          alert("请检查是否有必填项未填写！")
+          return
+        }
+
+        var params = new URLSearchParams();
+        params.append("operate", "sell");
+        params.append("salersmanname",this.newOrders.salersmanname);
+        params.append("itemid",this.newOrders.itemid);
+        params.append("itemname",this.newOrders.itemname);
+        params.append("counts",this.newOrders.counts);
+        params.append("price",this.newOrders.price);
+        params.append("totalprice",this.newOrders.totalprice);
+        params.append("customername",this.newOrders.customername);
+        params.append("customertelphone",this.newOrders.customertelphone);
+        params.append("customeraddress",this.newOrders.customeraddress);
+        params.append("date",this.newOrders.date);
+        this.$axios({
+            method: 'post',
+            url: this.ServerAddress + 'updatestocks',
+            contentType: 'application/x-www-form-urlencoded',
+            data:params,  
+        }).then(function(response) {
+            var result = response.data;
+            this.tableData = result
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
+      },
+
+      GetOrdersInfo: function(){
 
       },
 
@@ -244,7 +286,7 @@
             }.bind(this)).catch(function (error) { 
                 console.log(error);
             })
-    },
+        },
     }
   }
 
