@@ -10,17 +10,17 @@
       width="55">
     </el-table-column>
     <el-table-column
-      prop="salesmanname"
+      prop="salersmanname"
       label="销售人员"
       width="120">
     </el-table-column>
     <el-table-column
-      prop="saleitemname"
+      prop="itemname"
       label="销售物品"
       width="120">
     </el-table-column>    
     <el-table-column
-      prop="salesprice"
+      prop="price"
       label="销售单价"
       width="120">
     </el-table-column>
@@ -30,7 +30,7 @@
       width="120">
     </el-table-column>
     <el-table-column
-      prop="salestotalprice"
+      prop="totalprice"
       label="销售总价"
       width="120">
     </el-table-column>
@@ -160,6 +160,8 @@
     mounted (){
       this.getItemList()
       this.GetUserList()
+      this.GetOrderCounts()
+      this.GetOrderList()
     },
 
     methods:{
@@ -182,7 +184,7 @@
 
       ChangePage: function(pageIndex){
         this.pageIndex = pageIndex
-        this.GetOrdersInfo()
+        this.GetOrderList()
       },
 
       checkparams: function(){
@@ -222,16 +224,12 @@
             contentType: 'application/x-www-form-urlencoded',
             data:params,  
         }).then(function(response) {
-            var result = response.data;
-            this.tableData = result
             this.dialogVisible = false
+            this.GetOrderCounts()
+            this.GetOrderList()
             }.bind(this)).catch(function (error) { 
                 console.log(error);
             })
-      },
-
-      GetOrdersInfo: function(){
-
       },
 
       currentSel: function(selVal){
@@ -287,7 +285,36 @@
             }.bind(this)).catch(function (error) { 
                 console.log(error);
             })
-        },
+      },
+
+      GetOrderCounts: function(){
+        this.$axios({
+            method: 'get',
+            url: this.ServerAddress + 'getordersinfo',
+            contentType: 'application/x-www-form-urlencoded',
+            data:'',
+        }).then(function(response) {
+            this.totalCount = parseInt(response.data.Count);
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
+      },
+
+      GetOrderList: function(){
+        var params = new URLSearchParams();
+        params.append("index",(this.pageIndex - 1));
+        params.append("count",this.pageCount);        
+        this.$axios({
+            method: 'post',
+            url: this.ServerAddress + 'getordersinfo',
+            contentType: 'application/x-www-form-urlencoded',
+            data:params,
+        }).then(function(response) {
+            this.tableData = response.data;
+            }.bind(this)).catch(function (error) { 
+                console.log(error);
+            })
+      },
     }
   }
 
