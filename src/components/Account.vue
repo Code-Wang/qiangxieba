@@ -39,7 +39,7 @@
               <el-input v-model="form.defaultsize" placeholder="购买尺码" size="small" ></el-input>
             </el-form-item><br>
             <el-form-item>
-              <el-button type="primary" @click="getUser">搜索</el-button>
+              <el-button type="primary">搜索</el-button>
             </el-form-item>
           </el-form>
 </el-col>

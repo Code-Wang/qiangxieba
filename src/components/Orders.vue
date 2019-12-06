@@ -115,7 +115,7 @@
         <el-input v-model="newOrders.customeraddress" placeholder="顾客地址"></el-input>
       </el-form-item>      
       <el-form-item label="销售日期*">
-        <el-input v-model="newOrders.date" placeholder="销售日期"></el-input>
+        <el-date-picker v-model="newOrders.date" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="销售日期"></el-date-picker>
       </el-form-item>
     </el-form>
 
@@ -194,10 +194,11 @@
              this.newOrders.counts == '' ||
              this.newOrders.price == 0 ||
              this.newOrders.totalprice == 0 ||
-             this.newOrders.customername == ''){
+             this.newOrders.customername == '' ||
+             this.newOrders.date == ''){
                return false
              }
-             return true
+          return true
       },
 
       sendAddOrdersMsg: function(){
@@ -226,6 +227,7 @@
         }).then(function(response) {
             this.dialogVisible = false
             this.GetOrderCounts()
+            this.getItemList()
             this.GetOrderList()
             }.bind(this)).catch(function (error) { 
                 console.log(error);
@@ -249,7 +251,7 @@
           return
         }
 
-        if(this.newOrders.counts > this.maxsalecount){
+        if(parseInt(this.newOrders.counts) > parseInt(this.maxsalecount)){
           this.newOrders.counts = this.maxsalecount 
           alert("超过最大库存，库存只有" + this.maxsalecount)
         }
