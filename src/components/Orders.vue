@@ -6,10 +6,6 @@
     tooltip-effect="dark"
     style="width: 100%">
     <el-table-column
-      type="selection"
-      width="55">
-    </el-table-column>
-    <el-table-column
       prop="salersmanname"
       label="销售人员"
       width="120">
@@ -45,15 +41,15 @@
       width="180">
     </el-table-column>
     <el-table-column
-      prop="date"
-      label="销售日期"
-      width="120">
-    </el-table-column>
-    <el-table-column
       prop="customeraddress"
       label="顾客地址"
       show-overflow-tooltip>
     </el-table-column> 
+    <el-table-column
+      prop="date"
+      label="销售日期"
+      width="120">
+    </el-table-column>
   </el-table>
   <div style="margin-top: 20px">
     <el-row>
@@ -168,155 +164,156 @@
       AddNewOrders: function() {
       this.resetdata()
       this.dialogVisible = true
+      },
+
+    resetdata: function() {
+      this.newOrders.salersmanname = ''
+      this.newOrders.itemid = ''
+      this.newOrders.itemname = ''
+      this.newOrders.counts = ''
+      this.newOrders.price = 0
+      this.newOrders.totalprice = 0
+      this.newOrders.customername = ''
+      this.newOrders.customertelphone = ''
+      this.newOrders.customeraddress = ''
+      this.newOrders.date = ''
     },
-      resetdata: function() {
-          this.newOrders.salersmanname = ''
-          this.newOrders.itemid = ''
-          this.newOrders.itemname = ''
-          this.newOrders.counts = ''
-          this.newOrders.price = 0
-          this.newOrders.totalprice = 0
-          this.newOrders.customername = ''
-          this.newOrders.customertelphone = ''
-          this.newOrders.customeraddress = ''
-          this.newOrders.date = ''
-      },
 
-      ChangePage: function(pageIndex){
-        this.pageIndex = pageIndex
-        this.GetOrderList()
-      },
+    ChangePage: function(pageIndex){
+      this.pageIndex = pageIndex
+      this.GetOrderList()
+    },
 
-      checkparams: function(){
-          if(this.newOrders.salersmanname == '' ||
-             this.newOrders.itemid == '' ||
-             this.newOrders.itemname == ''  ||
-             this.newOrders.counts == '' ||
-             this.newOrders.price == 0 ||
-             this.newOrders.totalprice == 0 ||
-             this.newOrders.customername == '' ||
-             this.newOrders.date == ''){
-               return false
-             }
-          return true
-      },
-
-      sendAddOrdersMsg: function(){
-        if(!this.checkparams()){
-          alert("请检查是否有必填项未填写！")
-          return
-        }
-
-        var params = new URLSearchParams();
-        params.append("operate", "sell");
-        params.append("salersmanname",this.newOrders.salersmanname);
-        params.append("itemid",this.newOrders.itemid);
-        params.append("itemname",this.newOrders.itemname);
-        params.append("counts",this.newOrders.counts);
-        params.append("price",this.newOrders.price);
-        params.append("totalprice",this.newOrders.totalprice);
-        params.append("customername",this.newOrders.customername);
-        params.append("customertelphone",this.newOrders.customertelphone);
-        params.append("customeraddress",this.newOrders.customeraddress);
-        params.append("date",this.newOrders.date);
-        this.$axios({
-            method: 'post',
-            url: this.ServerAddress + 'updatestocks',
-            contentType: 'application/x-www-form-urlencoded',
-            data:params,  
-        }).then(function(response) {
-            this.dialogVisible = false
-            this.GetOrderCounts()
-            this.getItemList()
-            this.GetOrderList()
-            }.bind(this)).catch(function (error) { 
-                console.log(error);
-            })
-      },
-
-      currentSel: function(selVal){
-        for(let j = 0,len=this.itemlist.length; j < len; j++) {
-          if(this.itemlist[j] != null && this.itemlist[j].itemid == selVal){
-            this.newOrders.itemid = selVal
-            this.newOrders.itemname = this.itemlist[j].itemname
-            this.maxsalecount = this.itemlist[j].itemcount
-            break
+    checkparams: function(){
+      if(this.newOrders.salersmanname == '' ||
+          this.newOrders.itemid == '' ||
+          this.newOrders.itemname == ''  ||
+          this.newOrders.counts == '' ||
+          this.newOrders.price == 0 ||
+          this.newOrders.totalprice == 0 ||
+          this.newOrders.customername == '' ||
+          this.newOrders.date == ''){
+            return false
           }
+      return true
+    },
+
+    sendAddOrdersMsg: function(){
+      if(!this.checkparams()){
+        alert("请检查是否有必填项未填写！")
+        return
+      }
+
+      var params = new URLSearchParams();
+      params.append("operate", "sell");
+      params.append("salersmanname",this.newOrders.salersmanname);
+      params.append("itemid",this.newOrders.itemid);
+      params.append("itemname",this.newOrders.itemname);
+      params.append("counts",this.newOrders.counts);
+      params.append("price",this.newOrders.price);
+      params.append("totalprice",this.newOrders.totalprice);
+      params.append("customername",this.newOrders.customername);
+      params.append("customertelphone",this.newOrders.customertelphone);
+      params.append("customeraddress",this.newOrders.customeraddress);
+      params.append("date",this.newOrders.date);
+      this.$axios({
+          method: 'post',
+          url: this.ServerAddress + 'updatestocks',
+          contentType: 'application/x-www-form-urlencoded',
+          data:params,  
+      }).then(function(response) {
+          this.dialogVisible = false
+          this.GetOrderCounts()
+          this.getItemList()
+          this.GetOrderList()
+          }.bind(this)).catch(function (error) { 
+              console.log(error);
+          })
+    },
+
+    currentSel: function(selVal){
+      for(let j = 0,len=this.itemlist.length; j < len; j++) {
+        if(this.itemlist[j] != null && this.itemlist[j].itemid == selVal){
+          this.newOrders.itemid = selVal
+          this.newOrders.itemname = this.itemlist[j].itemname
+          this.maxsalecount = this.itemlist[j].itemcount
+          break
         }
-      },
+      }
+    },
 
-      changeSaleCounts: function(){
-        if(this.newOrders.itemid == '') {
-          alert("先选择销售的商品")
-          return
-        }
+    changeSaleCounts: function(){
+      if(this.newOrders.itemid == '') {
+        alert("先选择销售的商品")
+        return
+      }
 
-        if(parseInt(this.newOrders.counts) > parseInt(this.maxsalecount)){
-          this.newOrders.counts = this.maxsalecount 
-          alert("超过最大库存，库存只有" + this.maxsalecount)
-        }
-        this.calcTotalPrice()
-      },
+      if(parseInt(this.newOrders.counts) > parseInt(this.maxsalecount)){
+        this.newOrders.counts = this.maxsalecount 
+        alert("超过最大库存，库存只有" + this.maxsalecount)
+      }
+      this.calcTotalPrice()
+    },
 
-      calcTotalPrice: function(){
-        this.newOrders.totalprice = parseFloat(parseInt(this.newOrders.counts) * this.newOrders.price).toFixed(4)
-      },
+    calcTotalPrice: function(){
+      this.newOrders.totalprice = parseFloat(parseInt(this.newOrders.counts) * this.newOrders.price).toFixed(4)
+    },
 
-      getItemList: function (){
-        this.$axios({
-            method: 'get',
-            url: this.ServerAddress + 'getitemlist',
-            contentType: 'application/x-www-form-urlencoded',
-            data:'',  
-        }).then(function(response) {
-            var result= response.data;
-            this.itemlist = result
-            }.bind(this)).catch(function (error) { 
-                console.log(error);
-            })
-      },
+    getItemList: function (){
+      this.$axios({
+          method: 'get',
+          url: this.ServerAddress + 'getitemlist',
+          contentType: 'application/x-www-form-urlencoded',
+          data:'',  
+      }).then(function(response) {
+          var result= response.data;
+          this.itemlist = result
+          }.bind(this)).catch(function (error) { 
+              console.log(error);
+          })
+    },
 
-      GetUserList: function(){
-        this.$axios({
-            method: 'get',
-            url: this.ServerAddress + 'getuserinfo?index=userlist',
-            contentType: 'application/x-www-form-urlencoded',
-            data:'',
-        }).then(function(response) {
-            this.userlist = response.data;
-            }.bind(this)).catch(function (error) { 
-                console.log(error);
-            })
-      },
+    GetUserList: function(){
+      this.$axios({
+          method: 'get',
+          url: this.ServerAddress + 'getuserinfo?index=userlist',
+          contentType: 'application/x-www-form-urlencoded',
+          data:'',
+      }).then(function(response) {
+          this.userlist = response.data;
+          }.bind(this)).catch(function (error) { 
+              console.log(error);
+          })
+    },
 
-      GetOrderCounts: function(){
-        this.$axios({
-            method: 'get',
-            url: this.ServerAddress + 'getordersinfo',
-            contentType: 'application/x-www-form-urlencoded',
-            data:'',
-        }).then(function(response) {
-            this.totalCount = parseInt(response.data.Count);
-            }.bind(this)).catch(function (error) { 
-                console.log(error);
-            })
-      },
+    GetOrderCounts: function(){
+      this.$axios({
+          method: 'get',
+          url: this.ServerAddress + 'getordersinfo',
+          contentType: 'application/x-www-form-urlencoded',
+          data:'',
+      }).then(function(response) {
+          this.totalCount = parseInt(response.data.Count);
+          }.bind(this)).catch(function (error) { 
+              console.log(error);
+          })
+    },
 
-      GetOrderList: function(){
-        var params = new URLSearchParams();
-        params.append("index",(this.pageIndex - 1));
-        params.append("count",this.pageCount);        
-        this.$axios({
-            method: 'post',
-            url: this.ServerAddress + 'getordersinfo',
-            contentType: 'application/x-www-form-urlencoded',
-            data:params,
-        }).then(function(response) {
-            this.tableData = response.data;
-            }.bind(this)).catch(function (error) { 
-                console.log(error);
-            })
-      },
+    GetOrderList: function(){
+      var params = new URLSearchParams();
+      params.append("index",(this.pageIndex - 1));
+      params.append("count",this.pageCount);        
+      this.$axios({
+          method: 'post',
+          url: this.ServerAddress + 'getordersinfo',
+          contentType: 'application/x-www-form-urlencoded',
+          data:params,
+      }).then(function(response) {
+          this.tableData = response.data;
+          }.bind(this)).catch(function (error) { 
+              console.log(error);
+          })
+    },
     }
   }
 

@@ -7,6 +7,9 @@ import User from '@/components/User'
 import Account from '@/components/Account'
 import Stocks from '@/components/Stocks'
 import Orders from '@/components/Orders'
+import ItemMenu from '@/components/ItemMenu'
+import StocksManage from '@/components/StocksManage'
+import ItemManage from '@/components/ItemManage'
 
 Vue.use(Router)
 
@@ -38,15 +41,30 @@ export default new Router({
           component: Account
         },
         {
-          path: 'stocks',
-          name: 'Stocks',
-          component: Stocks
-        },           
-        {
           path: 'orders',
           name: 'Orders',
           component: Orders
-        },       
+        },         
+        {
+          path: 'itemmenu',
+          name: 'ItemMenu',
+          component: ItemMenu,
+        },
+        {
+          path: 'itemmanage',
+          name: 'ItemManage',
+          component: ItemManage,
+        },
+        {
+          path: 'stocksmanage',
+          name: 'StocksManage',
+          component: StocksManage,
+        },
+        {
+          path: 'stocks',
+          name: 'Stocks',
+          component: Stocks,
+        },     
       ]  
     }
   ]

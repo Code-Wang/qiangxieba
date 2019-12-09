@@ -1,9 +1,9 @@
 <template>
     <div>
         <el-row>
-        <el-col :span="8" v-for="(item, index) in stocksdata" :key="index" :offset="index > 0 ? 1 : 0">
+        <el-col :span="5" v-for="(item, index) in stocksdata" :key="index" :offset="index > 0 ? 1 : 0">
             <el-card :body-style="{ padding: '0px' }">
-            <img :src="item.itemimage" class="image" style="height: 300px">
+            <img :src="item.itemimage" class="image" style="height: 200px">
             <div style="padding: 14px;">
                 <span>{{item.itemname}}</span>
                 <div class="bottom clearfix">
@@ -17,7 +17,7 @@
     </div>
 </template>
 
-<style>
+<style scoped>
   .time {
     font-size: 13px;
     color: #999;
